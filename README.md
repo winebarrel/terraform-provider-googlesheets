@@ -44,7 +44,7 @@ output "values" {
 ## Run locally for development
 
 ```sh
-# TODO: Save "credentials.json".
+# TODO: Create "credentials.json".
 #       see https://cloud.google.com/iam/docs/keys-create-delete
 cp googlesheets.tf.sample googlesheets.tf
 make
