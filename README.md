@@ -10,7 +10,7 @@ Terraform provider for retrieving data from Google Sheets.
 ```tf
 terraform {
   required_providers {
-    lambdaconfig = {
+    googlesheets = {
       source  = "winebarrel/googlesheets"
       version = ">= 0.2.0"
     }
