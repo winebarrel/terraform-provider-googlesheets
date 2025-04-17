@@ -20,3 +20,8 @@ output "values" {
 #     "B2 TEXT",
 #   ],
 # ]
+
+output "sensitive_values" {
+  value     = jsondecode(data.googlesheets_sheet.my_sheet.sensitive_json)
+  sensitive = true
+}

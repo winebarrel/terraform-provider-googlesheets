@@ -18,3 +18,8 @@ data "googlesheets_sheet" "my_sheet" {
 output "values" {
   value = jsondecode(data.googlesheets_sheet.my_sheet.json)
 }
+
+output "sensitive_values" {
+  value     = jsondecode(data.googlesheets_sheet.my_sheet.sensitive_json)
+  sensitive = true
+}

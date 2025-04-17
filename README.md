@@ -12,7 +12,7 @@ terraform {
   required_providers {
     lambdaconfig = {
       source  = "winebarrel/googlesheets"
-      version = ">= 0.1.0"
+      version = ">= 0.2.0"
     }
   }
 }
@@ -39,6 +39,11 @@ output "values" {
 #     "B2 TEXT",
 #   ],
 # ]
+
+output "sensitive_values" {
+  value     = jsondecode(data.googlesheets_sheet.my_sheet.sensitive_json)
+  sensitive = true
+}
 ```
 
 ## Run locally for development

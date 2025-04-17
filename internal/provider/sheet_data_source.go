@@ -22,9 +22,10 @@ type SheetDataSource struct {
 }
 
 type SheetDataSourceModel struct {
-	SheetId types.String `tfsdk:"sheet_id"`
-	Range   types.String `tfsdk:"range"`
-	Json    types.String `tfsdk:"json"`
+	SheetId       types.String `tfsdk:"sheet_id"`
+	Range         types.String `tfsdk:"range"`
+	Json          types.String `tfsdk:"json"`
+	SensitiveJson types.String `tfsdk:"sensitive_json"`
 }
 
 func (d *SheetDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -42,6 +43,10 @@ func (d *SheetDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			},
 			"json": schema.StringAttribute{
 				Computed: true,
+			},
+			"sensitive_json": schema.StringAttribute{
+				Computed:  true,
+				Sensitive: true,
 			},
 		},
 	}
@@ -91,6 +96,8 @@ func (d *SheetDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		return
 	}
 
-	data.Json = types.StringValue(string(rawJson))
+	jsonStr := types.StringValue(string(rawJson))
+	data.Json = jsonStr
+	data.SensitiveJson = jsonStr
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
