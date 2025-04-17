@@ -11,27 +11,27 @@ import (
 	"google.golang.org/api/sheets/v4"
 )
 
-var _ datasource.DataSourceWithConfigure = &SheetDataSource{}
+var _ datasource.DataSourceWithConfigure = &SensitiveSheetDataSource{}
 
-func NewSheetDataSource() datasource.DataSource {
-	return &SheetDataSource{}
+func NewSensitiveSheetDataSource() datasource.DataSource {
+	return &SensitiveSheetDataSource{}
 }
 
-type SheetDataSource struct {
+type SensitiveSheetDataSource struct {
 	service *sheets.Service
 }
 
-type SheetDataSourceModel struct {
+type SensitiveSheetDataSourceModel struct {
 	SheetId types.String `tfsdk:"sheet_id"`
 	Range   types.String `tfsdk:"range"`
 	Json    types.String `tfsdk:"json"`
 }
 
-func (d *SheetDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_sheet"
+func (d *SensitiveSheetDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_sensitive_sheet"
 }
 
-func (d *SheetDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *SensitiveSheetDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"sheet_id": schema.StringAttribute{
@@ -41,13 +41,14 @@ func (d *SheetDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Required: true,
 			},
 			"json": schema.StringAttribute{
-				Computed: true,
+				Computed:  true,
+				Sensitive: true,
 			},
 		},
 	}
 }
 
-func (d *SheetDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *SensitiveSheetDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -66,8 +67,8 @@ func (d *SheetDataSource) Configure(ctx context.Context, req datasource.Configur
 	d.service = svr
 }
 
-func (d *SheetDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data SheetDataSourceModel
+func (d *SensitiveSheetDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data SensitiveSheetDataSourceModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
 	if resp.Diagnostics.HasError() {

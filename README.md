@@ -40,8 +40,13 @@ output "values" {
 #   ],
 # ]
 
+data "googlesheets_sensitive_sheet" "my_sheet" {
+  sheet_id = "..."
+  range    = "sheet1!A2:B2"
+}
+
 output "sensitive_values" {
-  value     = jsondecode(data.googlesheets_sheet.my_sheet.sensitive_json)
+  value     = jsondecode(data.googlesheets_sensitive_sheet.my_sheet.json)
   sensitive = true
 }
 ```
