@@ -23,3 +23,4 @@ description: |-
 ### Read-Only
 
 - `json` (String)
+- `sensitive_json` (String, Sensitive)

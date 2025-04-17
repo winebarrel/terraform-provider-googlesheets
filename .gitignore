@@ -30,3 +30,4 @@ go.work.sum
 *.tfstate
 *.tfstate.*
 *.json
+.terraform
