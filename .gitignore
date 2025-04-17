@@ -23,3 +23,10 @@ go.work.sum
 
 # env file
 .env
+
+/terraform-provider-googlesheets
+/dev.tfrc
+/*.tf
+*.tfstate
+*.tfstate.*
+*.json
