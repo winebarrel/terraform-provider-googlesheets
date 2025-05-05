@@ -4,7 +4,7 @@ go 1.24.1
 
 require (
 	github.com/hashicorp/terraform-plugin-framework v1.14.1
-	golang.org/x/oauth2 v0.29.0
+	golang.org/x/oauth2 v0.30.0
 	google.golang.org/api v0.231.0
 )
 
