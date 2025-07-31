@@ -3,7 +3,7 @@ module github.com/winebarrel/terraform-provider-googlesheets
 go 1.24.1
 
 require (
-	github.com/hashicorp/terraform-plugin-framework v1.15.0
+	github.com/hashicorp/terraform-plugin-framework v1.15.1
 	golang.org/x/oauth2 v0.30.0
 	google.golang.org/api v0.244.0
 )
