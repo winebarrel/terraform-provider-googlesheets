@@ -2,11 +2,17 @@ package provider
 
 import (
 	"context"
+	"fmt"
+	"os"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
@@ -21,6 +27,7 @@ type GoogleSheetsProvider struct {
 
 type GoogleSheetsProviderModel struct {
 	CredentialsJson types.String `tfsdk:"credentials_json"`
+	CredentialsEnv  types.String `tfsdk:"credentials_env"`
 }
 
 func (p *GoogleSheetsProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -34,6 +41,15 @@ func (p *GoogleSheetsProvider) Schema(ctx context.Context, req provider.SchemaRe
 			"credentials_json": schema.StringAttribute{
 				Optional:  true,
 				Sensitive: true,
+				Validators: []validator.String{
+					stringvalidator.ConflictsWith(path.MatchRelative().AtParent().AtName("credentials_env")),
+				},
+			},
+			"credentials_env": schema.StringAttribute{
+				Optional: true,
+				Validators: []validator.String{
+					stringvalidator.ConflictsWith(path.MatchRelative().AtParent().AtName("credentials_json")),
+				},
 			},
 		},
 	}
@@ -51,7 +67,17 @@ func (p *GoogleSheetsProvider) Configure(ctx context.Context, req provider.Confi
 	var creds *google.Credentials
 	var err error
 
-	if !data.CredentialsJson.IsNull() {
+	if !data.CredentialsEnv.IsNull() {
+		envName := data.CredentialsEnv.ValueString()
+		envValue := os.Getenv(envName)
+
+		if envValue == "" {
+			resp.Diagnostics.AddError("Unable to Get Credentials from environment variable", fmt.Sprintf("$%s is empty", envName))
+			return
+		}
+
+		creds, err = google.CredentialsFromJSON(ctx, []byte(envValue), sheets.SpreadsheetsReadonlyScope)
+	} else if !data.CredentialsJson.IsNull() {
 		creds, err = google.CredentialsFromJSON(ctx, []byte(data.CredentialsJson.ValueString()), sheets.SpreadsheetsReadonlyScope)
 	} else {
 		creds, err = google.FindDefaultCredentials(ctx, sheets.SpreadsheetsReadonlyScope)
