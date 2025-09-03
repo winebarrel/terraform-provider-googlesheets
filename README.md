@@ -19,6 +19,7 @@ terraform {
 
 provider "googlesheets" {
   credentials_json = file("credentials.json")
+  # credentials_env = "CREDS_ENV_NAME"
 }
 
 data "googlesheets_sheet" "my_sheet" {
