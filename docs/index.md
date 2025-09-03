@@ -18,7 +18,7 @@ provider "googlesheets" {
 
 data "googlesheets_sheet" "my_sheet" {
   sheet_id = "..."
-  range    = "sheet1!A2:B2"
+  range    = "sheet1!A1:B2"
 }
 
 output "values" {
@@ -37,7 +37,7 @@ output "values" {
 
 data "googlesheets_sensitive_sheet" "my_sheet" {
   sheet_id = "..."
-  range    = "sheet1!A2:B2"
+  range    = "sheet1!A1:B2"
 }
 
 output "sensitive_values" {
