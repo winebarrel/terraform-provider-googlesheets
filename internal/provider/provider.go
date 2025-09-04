@@ -7,6 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -19,7 +20,7 @@ import (
 	"google.golang.org/api/sheets/v4"
 )
 
-var _ provider.Provider = &GoogleSheetsProvider{}
+var _ provider.ProviderWithEphemeralResources = &GoogleSheetsProvider{}
 
 type GoogleSheetsProvider struct {
 	version string
@@ -97,6 +98,7 @@ func (p *GoogleSheetsProvider) Configure(ctx context.Context, req provider.Confi
 
 	resp.DataSourceData = svr
 	resp.ResourceData = svr
+	resp.EphemeralResourceData = svr
 }
 
 func (p *GoogleSheetsProvider) Resources(ctx context.Context) []func() resource.Resource {
@@ -109,6 +111,12 @@ func (p *GoogleSheetsProvider) DataSources(ctx context.Context) []func() datasou
 	return []func() datasource.DataSource{
 		NewSheetDataSource,
 		NewSensitiveSheetDataSource,
+	}
+}
+
+func (p *GoogleSheetsProvider) EphemeralResources(ctx context.Context) []func() ephemeral.EphemeralResource {
+	return []func() ephemeral.EphemeralResource{
+		NewSheetEphemeralResource,
 	}
 }
 

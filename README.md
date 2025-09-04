@@ -50,6 +50,11 @@ output "sensitive_values" {
   value     = jsondecode(data.googlesheets_sensitive_sheet.my_sheet.json)
   sensitive = true
 }
+
+# ephemeral "googlesheets_sheet" "my_sheet" {
+#   sheet_id = "..."
+#   range    = "sheet1!A1:B2"
+# }
 ```
 
 ## Run locally for development
