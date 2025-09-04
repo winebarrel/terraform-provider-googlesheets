@@ -12,7 +12,7 @@ terraform {
   required_providers {
     googlesheets = {
       source  = "winebarrel/googlesheets"
-      version = ">= 0.4.0"
+      version = ">= 0.5.0"
     }
   }
 }
