@@ -77,9 +77,9 @@ func (p *GoogleSheetsProvider) Configure(ctx context.Context, req provider.Confi
 			return
 		}
 
-		creds, err = google.CredentialsFromJSONWithParams(ctx, []byte(envValue), google.CredentialsParams{Scopes: []string{sheets.SpreadsheetsReadonlyScope}})
+		creds, err = google.CredentialsFromJSONWithParams(ctx, []byte(envValue), google.CredentialsParams{Scopes: []string{sheets.SpreadsheetsReadonlyScope}}) //nolint:staticcheck
 	} else if !data.CredentialsJson.IsNull() {
-		creds, err = google.CredentialsFromJSONWithParams(ctx, []byte(data.CredentialsJson.ValueString()), google.CredentialsParams{Scopes: []string{sheets.SpreadsheetsReadonlyScope}})
+		creds, err = google.CredentialsFromJSONWithParams(ctx, []byte(data.CredentialsJson.ValueString()), google.CredentialsParams{Scopes: []string{sheets.SpreadsheetsReadonlyScope}}) //nolint:staticcheck
 	} else {
 		creds, err = google.FindDefaultCredentials(ctx, sheets.SpreadsheetsReadonlyScope)
 	}
